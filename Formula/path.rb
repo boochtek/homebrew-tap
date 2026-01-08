@@ -1,8 +1,8 @@
 class Path < Formula
   desc "Easily manipulate your shell PATH"
   homepage "https://github.com/boochtek/path-manager"
-  url "https://github.com/boochtek/path-manager/archive/refs/tags/v0.9.tar.gz"
-  sha256 "ae1c8950908dadb72bfb840dba452bd2a7014dd93a24fb022b2b465ea87f69d4"
+  url "https://github.com/boochtek/path-manager/archive/refs/tags/v0.9.2.tar.gz"
+  sha256 "b9b705b82447f240f2cad19e96c56441915d7230c8594717343816b65d387ad5"
   license "MIT"
   head "https://github.com/boochtek/path-manager.git", branch: "main"
 
