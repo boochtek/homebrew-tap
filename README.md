@@ -13,6 +13,7 @@ brew tap boochtek/tap
 | Formula | Description |
 |---------|-------------|
 | [path](https://github.com/boochtek/path-manager) | Easily manipulate your shell PATH |
+| lessfilter | Preprocessor for less/lesspipe to handle Markdown files with syntax highlighting |
 
 ## Usage
 
