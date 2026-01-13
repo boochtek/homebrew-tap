@@ -1,60 +1,41 @@
 class TerminalTool < Formula
 
-  desc "Terminal utilities for window/tab manipulation"
-  homepage "https://github.com/boochtek/homebrew-tap"
-  url "https://github.com/boochtek/homebrew-tap/archive/refs/heads/main.tar.gz"
-  version "1.0.0"
+  desc "Terminal utilities for window/tab manipulation, badges, notifications, and more"
+  homepage "https://github.com/boochtek/terminal-tool"
+  url "https://github.com/boochtek/terminal-tool/archive/refs/tags/v0.9.0.tar.gz"
+  sha256 "10420b50ddbf85c5c1bc574b32829c789cb5b628608b0cead0046514731bad3b"
   license "MIT"
 
+  depends_on "bats-core" => :test
+  depends_on "terminal-notifier" => :recommended
+
   def install
-    (bin / "terminal").write <<~'BASH'
-      #!/bin/bash
-      # terminal - terminal utilities
-
-      usage() {
-          echo "Usage: terminal <command> [args]" >&2
-          echo "" >&2
-          echo "Commands:" >&2
-          echo "  title <title>  Set the terminal window/tab title" >&2
-          exit 1
-      }
-
-      cmd_title() {
-          if [[ $# -eq 0 ]]; then
-              echo "Usage: terminal title <title>" >&2
-              exit 1
-          fi
-          # OSC 0 sets both window and icon title
-          # Works with xterm, iTerm2, Terminal.app, and most modern terminals
-          printf '\033]0;%s\007' "$*"
-      }
-
-      [[ $# -eq 0 ]] && usage
-
-      command="$1"
-      shift
-
-      case "$command" in
-          title)
-              cmd_title "$@"
-              ;;
-          *)
-              echo "Unknown command: $command" >&2
-              usage
-              ;;
-      esac
-    BASH
-
-    chmod 0o755, bin / "terminal"
+    bin.install "terminal.sh" => "terminal"
   end
 
   def caveats
     <<~EOS
       Usage:
-        terminal title My Project
+        terminal <command> [args]
 
-      This sets the terminal window/tab title using standard escape sequences.
-      Works with Terminal.app, iTerm2, and most xterm-compatible terminals.
+      Commands:
+        title <text>           Set window/tab title
+        badge <text>           Set iTerm2 badge (corner watermark)
+        reset                  Reset terminal state
+        notify <message>       Send notification
+        cwd [directory]        Set working directory for new tabs
+        profile <name>         Switch iTerm2 profile
+        mark                   Set navigation mark
+        attention              Request attention (bounce dock)
+        progress <0-100|done>  Show progress in tab bar
+        info                   Show terminal information
+        colors                 Display color palette
+        cursor <style>         Change cursor style
+        clipboard get|set      Access system clipboard
+        image <file>           Display inline image
+        link <url> [text]      Create clickable hyperlink
+
+      Run 'terminal --help' for more information.
     EOS
   end
 
@@ -65,13 +46,19 @@ class TerminalTool < Formula
     # Basic syntax check
     system "bash", "-n", bin / "terminal"
 
-    # Test with no arguments (should exit 1)
-    system bin / "terminal"
-    assert_equal 1, $CHILD_STATUS.exitstatus
+    # Version check
+    assert_match "0.9.0", shell_output("#{bin}/terminal --version")
 
-    # Test title with no arguments (should exit 1)
-    system bin / "terminal", "title"
-    assert_equal 1, $CHILD_STATUS.exitstatus
+    # Help check
+    output = shell_output("#{bin}/terminal --help", 1)
+    assert_match "Usage:", output
+    assert_match "title", output
+    assert_match "badge", output
+
+    # Test commands exist (usage errors)
+    shell_output("#{bin}/terminal title", 1)
+    shell_output("#{bin}/terminal badge", 1)
+    shell_output("#{bin}/terminal cursor", 1)
   end
 
 end
