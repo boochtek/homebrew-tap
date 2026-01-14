@@ -2,8 +2,8 @@ class TerminalTool < Formula
 
   desc "Terminal utilities for window/tab manipulation, badges, notifications, and more"
   homepage "https://github.com/boochtek/terminal-tool"
-  url "https://github.com/boochtek/terminal-tool/archive/refs/tags/v0.9.1.tar.gz"
-  sha256 "38f5bfaa47a877289cd059b22a4ec1f02416f35141bcc51672fc9845dfba9ead"
+  url "https://github.com/boochtek/terminal-tool/archive/refs/tags/v0.9.2.tar.gz"
+  sha256 "a40890cbaa7379fb78db0af353e64d1a00ee22963331c274c9cc42ef65eca881"
   license "MIT"
 
   depends_on "bats-core" => :test
@@ -47,7 +47,7 @@ class TerminalTool < Formula
     system "bash", "-n", bin / "terminal"
 
     # Version check
-    assert_match "0.9.1", shell_output("#{bin}/terminal --version")
+    assert_match "0.9.2", shell_output("#{bin}/terminal --version")
 
     # Help check (exits 0 for --help)
     output = shell_output("#{bin}/terminal --help")
